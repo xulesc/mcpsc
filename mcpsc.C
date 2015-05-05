@@ -3,7 +3,9 @@
 #include "usm.hpp"
 #include "tmalign_extern.h"
 #include "pom/ipdb.h"
+#ifndef PC_TEST
 #include "rckskel.h"
+#endif
 #include <sys/timeb.h>
 #include <stdio.h>
 // little trick to allow the application to be called "RCCE_APP" under
