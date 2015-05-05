@@ -43,7 +43,7 @@ CE_LFLAGS := $(LFLAGS) -lm -ffast-math -lboost_iostreams -lboost_system -lpthrea
 
 pc_test_all_v_all: $(MOBJECTS) $(RCKSKEL_ARCHIVE)
 	$(CC) $(CE_CFLAGS) -Wall -I$(RCKSKEL_INC) -c mcpsc.C -o mcpsc.o -D PC_TEST
-	$(CC) -o mcpsc mcpsc.o $(MOBJECTS) $(CE_LFLAGS)
+	$(CC) -o mcpsc mcpsc.o $(MOBJECTS) $(CE_LFLAGS) $(RCKSKEL_ARCHIVE) $(RCCE_ARCHIVE)
 
 pc_test_many_v_many: $(MOBJECTS) $(RCKSKEL_ARCHIVE)
 	$(CC) $(CE_CFLAGS) -Wall -I$(RCKSKEL_INC) -c mcpsc.C -o mcpsc.o -D PC_TEST -D MANY_MANY
