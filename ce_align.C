@@ -35,6 +35,10 @@
  OTHER RIGHTS.
  
  */
+/*
+ Modified to load only one model per pdb file and avoid printing for batch
+ runs.
+*/
 #include "ce.h"
 ///////////////////////////////////////////////////////////////////////////
 template<class A> void NewArray(A *** array, int Narray1, int Narray2) {

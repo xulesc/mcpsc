@@ -232,8 +232,14 @@ int main(int argc, char **argv) {
 	cout << "TMalign data load time: " << diff_timeb(tp1, tp2) << endl;
 	backbone_ backbone_1;
 
+#ifndef ONLY_CE
+#ifndef ONLY_TMALIGN
 	do_usm(pdb_cm_name);
+#endif
+#endif
 
+#ifndef ONLY_CE
+#ifndef ONLY_USM
 	// do TMalign
 	ftime(&otp1);
 	for (int i = 0; i < file_count; i++) {
@@ -296,7 +302,11 @@ int main(int argc, char **argv) {
 	}
 	ftime(&otp2);
 	printf("TMalign Total time (msec): %ld\n", diff_timeb(otp1, otp2));
+#endif
+#endif
 
+#ifndef ONLY_TMALIGN
+#ifndef ONLY_USM
 	// do CE
 	ftime(&otp1);
 	for (int i = 0; i < file_count; i++) {
@@ -332,6 +342,8 @@ int main(int argc, char **argv) {
 	}
 	ftime(&otp2);
 	printf("CE Total time (msec): %ld\nq", diff_timeb(otp1, otp2));
+#endif
+#endif
 #ifdef SCC_1_CORE_TEST
 	}
 #endif
