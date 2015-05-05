@@ -375,7 +375,9 @@ int main(int argc, char **argv) {
 
 
 	return 0;
+}
 #endif
+#ifndef PC_TEST
 	rckskel_env_t env;
 	rckskel_env_init(&env, &argc, &argv);
 	int ue_count = env.ue_count, ue_id = env.ue_id;
@@ -891,6 +893,7 @@ int client_receive_job(timeb t1) {
 	master_in_data.seconds_at_result_send = t.time;
 	return RCKSKEL_FALSE;
 }
+#endif
 ////////////////////////////////////////////////////////////////////
 void CE::scratch_align_ent(char *db_tmp_path, char *pdb_dir_name) {
 	// master node specific work
