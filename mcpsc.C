@@ -428,7 +428,7 @@ int main(int argc, char **argv) {
 
 		cout << "loading tmalign data" << endl;
 		ftime(&tp1);
-//		tmalign_load_data(file_count, filenames, pdb_dir_name);
+		tmalign_load_data(file_count, filenames, pdb_dir_name);
 		ftime(&tp2);
 		cout << "TMalign data load time: " << diff_timeb(tp1, tp2) << endl;
 
@@ -471,14 +471,14 @@ int main(int argc, char **argv) {
 				job_indexes[jcount] = jcount;
 				jcount += 1;
 				// tmalign task
-/*				job_pool[jcount].algo_type = TMALIGN_ALGO_TYPE;
+				job_pool[jcount].algo_type = TMALIGN_ALGO_TYPE;
 				job_pool[jcount].protein1 = &proteins_data[i];
 				job_pool[jcount].protein2 = &proteins_data[j];
 				job_pool[jcount].protein1_idx = i;
 				job_pool[jcount].protein2_idx = j;
 				job_indexes[jcount] = jcount;
 				jcount += 1;
-*/			}
+			}
 		}
 		cout << "job count: " << jcount << endl;
 #ifdef RANDOM_SPLIT
