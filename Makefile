@@ -41,11 +41,23 @@ CC := g++
 CE_CFLAGS := $(CFLAGS) -DFUNCPROTO -DREAD_WRITE -DSGI -O3 -std=c++11
 CE_LFLAGS := $(LFLAGS) -lm -ffast-math -lboost_iostreams -lboost_system -lpthread -lz -static 
 
-pc_test_all_v_all: $(MOBJECTS) $(RCKSKEL_ARCHIVE)
-	$(CC) $(CE_CFLAGS) -Wall -I$(RCKSKEL_INC) -c mcpsc.C -o mcpsc.o -D PC_TEST
-	$(CC) -o mcpsc mcpsc.o $(MOBJECTS) $(CE_LFLAGS)
+pc_test_all_v_all: $(MOBJECTS) 
+	$(CC) $(CE_CFLAGS) -Wall -I$(RCKSKEL_INC) -c mcpsc.C -o mcpsc.o -D PC_TEST 
+	$(CC) -o mcpsc mcpsc.o $(MOBJECTS) $(CE_LFLAGS) 
 
-pc_test_many_v_many: $(MOBJECTS) $(RCKSKEL_ARCHIVE)
+pc_test_usm: $(MOBJECTS) 
+	$(CC) $(CE_CFLAGS) -Wall -c mcpsc.C -o mcpsc.o -D PC_TEST -D ONLY_USM 
+	$(CC) -o mcpsc mcpsc.o $(MOBJECTS) $(CE_LFLAGS) 
+	
+pc_test_tmalign: $(MOBJECTS) 
+	$(CC) $(CE_CFLAGS) -Wall -I$(RCKSKEL_INC) -c mcpsc.C -o mcpsc.o -D PC_TEST -D ONLY_TMALIGN
+	$(CC) -o mcpsc mcpsc.o $(MOBJECTS) $(CE_LFLAGS) 
+	
+pc_test_ce: $(MOBJECTS) $(RCKSKEL_ARCHIVE)
+	$(CC) $(CE_CFLAGS) -Wall -I$(RCKSKEL_INC) -c mcpsc.C -o mcpsc.o -D PC_TEST -D ONLY_CE
+	$(CC) -o mcpsc mcpsc.o $(MOBJECTS) $(CE_LFLAGS) 	
+
+pc_test_many_v_many: $(MOBJECTS) 
 	$(CC) $(CE_CFLAGS) -Wall -I$(RCKSKEL_INC) -c mcpsc.C -o mcpsc.o -D PC_TEST -D MANY_MANY
 	$(CC) -o mcpsc mcpsc.o $(MOBJECTS) $(CE_LFLAGS)
 	

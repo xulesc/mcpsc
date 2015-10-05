@@ -1,46 +1,11 @@
-///////////////////////////////////////////////////////////////////////////
-//  Combinatorial Extension Algorithm for Protein Structure Alignment    //
-//                                                                       //
-//  Authors: I.Shindyalov & P.Bourne                                     //
-///////////////////////////////////////////////////////////////////////////
-/*
- 
- Copyright (c)  1997-2000   The Regents of the University of California
- All Rights Reserved
- 
- Permission to use, copy, modify and distribute any part of this CE
- software for educational, research and non-profit purposes, without fee,
- and without a written agreement is hereby granted, provided that the above
- copyright notice, this paragraph and the following three paragraphs appear
- in all copies.
- 
- Those desiring to incorporate this CE Software into commercial products
- or use for commercial purposes should contact the Technology Transfer
- Office, University of California, San Diego, 9500 Gilman Drive, La Jolla,
- CA 92093-0910, Ph: (619) 534-5815, FAX: (619) 534-7345.
- 
- IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR
- DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
- LOST PROFITS, ARISING OUT OF THE USE OF THIS CE SOFTWARE, EVEN IF THE
- UNIVERSITY OF CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
- DAMAGE.
- 
- THE CE SOFTWARE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND THE
- UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE,
- SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.  THE UNIVERSITY OF
- CALIFORNIA MAKES NO REPRESENTATIONS AND EXTENDS NO WARRANTIES OF ANY KIND,
- EITHER IMPLIED OR EXPRESS, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, OR THAT
- THE USE OF THE CE SOFTWARE WILL NOT INFRINGE ANY PATENT, TRADEMARK OR
- OTHER RIGHTS.
- 
- */
 #include "comm_block.h"
 #include "ce.h"
 #include "usm.hpp"
 #include "tmalign_extern.h"
 #include "pom/ipdb.h"
+#ifndef PC_TEST
 #include "rckskel.h"
+#endif
 #include <sys/timeb.h>
 #include <stdio.h>
 // little trick to allow the application to be called "RCCE_APP" under
@@ -269,8 +234,14 @@ int main(int argc, char **argv) {
 	cout << "TMalign data load time: " << diff_timeb(tp1, tp2) << endl;
 	backbone_ backbone_1;
 
+#ifndef ONLY_CE
+#ifndef ONLY_TMALIGN
 	do_usm(pdb_cm_name);
+#endif
+#endif
 
+#ifndef ONLY_CE
+#ifndef ONLY_USM
 	// do TMalign
 	ftime(&otp1);
 	for (int i = 0; i < file_count; i++) {
@@ -333,7 +304,11 @@ int main(int argc, char **argv) {
 	}
 	ftime(&otp2);
 	printf("TMalign Total time (msec): %ld\n", diff_timeb(otp1, otp2));
+#endif
+#endif
 
+#ifndef ONLY_TMALIGN
+#ifndef ONLY_USM
 	// do CE
 	ftime(&otp1);
 	for (int i = 0; i < file_count; i++) {
@@ -369,13 +344,17 @@ int main(int argc, char **argv) {
 	}
 	ftime(&otp2);
 	printf("CE Total time (msec): %ld\nq", diff_timeb(otp1, otp2));
+#endif
+#endif
 #ifdef SCC_1_CORE_TEST
 	}
 #endif
 
 
 	return 0;
+}
 #endif
+#ifndef PC_TEST
 	rckskel_env_t env;
 	rckskel_env_init(&env, &argc, &argv);
 	int ue_count = env.ue_count, ue_id = env.ue_id;
@@ -449,7 +428,7 @@ int main(int argc, char **argv) {
 
 		cout << "loading tmalign data" << endl;
 		ftime(&tp1);
-//		tmalign_load_data(file_count, filenames, pdb_dir_name);
+		tmalign_load_data(file_count, filenames, pdb_dir_name);
 		ftime(&tp2);
 		cout << "TMalign data load time: " << diff_timeb(tp1, tp2) << endl;
 
@@ -492,14 +471,14 @@ int main(int argc, char **argv) {
 				job_indexes[jcount] = jcount;
 				jcount += 1;
 				// tmalign task
-/*				job_pool[jcount].algo_type = TMALIGN_ALGO_TYPE;
+				job_pool[jcount].algo_type = TMALIGN_ALGO_TYPE;
 				job_pool[jcount].protein1 = &proteins_data[i];
 				job_pool[jcount].protein2 = &proteins_data[j];
 				job_pool[jcount].protein1_idx = i;
 				job_pool[jcount].protein2_idx = j;
 				job_indexes[jcount] = jcount;
 				jcount += 1;
-*/			}
+			}
 		}
 		cout << "job count: " << jcount << endl;
 #ifdef RANDOM_SPLIT
@@ -891,6 +870,7 @@ int client_receive_job(timeb t1) {
 	master_in_data.seconds_at_result_send = t.time;
 	return RCKSKEL_FALSE;
 }
+#endif
 ////////////////////////////////////////////////////////////////////
 void CE::scratch_align_ent(char *db_tmp_path, char *pdb_dir_name) {
 	// master node specific work

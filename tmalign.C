@@ -1,3 +1,61 @@
+/**************************************************************************
+*     This program is to identify the best alignment of two protein 
+*     structures that gives the highest TM-score. Input structures must 
+*     be in the PDB format. By default, TM-score is normalized by the 
+*     second protein. Users can obtain a brief instruction by simply 
+*     running the program without arguments. For comments/suggestions,
+*     please contact email: zhng@umich.edu.
+*     
+*     Reference to cite:
+*     Yang Zhang, Jeffrey Skolnick, Nucl. Acid Res. 2005 33: 2303-9
+*     
+*     Permission to use, copy, modify, and distribute this program for 
+*     any purpose, with or without fee, is hereby granted, provided that
+*     the notices on the head, the reference information, and this
+*     copyright notice appear in all copies or substantial portions of 
+*     the Software. It is provided "as is" without express or implied 
+*     warranty.
+************************ updating history ********************************
+*     2005/06/01: A bug of two-point superposition was fixed.
+*     2005/10/19: the program was reformed so that the alignment
+*                 results are not dependent on the specific compilers.
+*     2006/06/20: select 'A' if there is altLoc when reading PDB file.
+*     2007/02/27: rotation matrix from Chain-1 to Chain-2 was added.
+*     2007/04/18: added options with TM-score normalized by average
+*                 length, shorter length, or longer length of two 
+*                 structures.
+*     2007/05/23: added additional output file 'TM.sup_all' for showing
+*                 all atoms while 'TM.sup' is only for aligned atoms
+*     2007/09/19: added a new feature alignment to deal with the problem
+*                 of aligning fractional structures (e.g. protein
+*                 interfaces).
+*     2007/10/16: A bug for irregular bond-length models was fixed.
+*     2009/03/14: A new initial alignment was added and previous initial
+*                 alignments are further enhanced. This change increased
+*                 accuracy by 4% but increases CPU cost by 40%.
+*     2009/08/20: A bug for asymmetry alignment result was fixed.
+*     2010/08/02: A new RMSD matrix was used to remove obsolete statements.
+*                 Staled subroutines were deleted.
+*     2011/01/03: The length of pdb file names were extended to 500.
+*     2011/01/24: Fixed a bug on output file name created on 2011/01/03.
+*     2011/01/30: An open source license is attached to the program.
+*     2011/09/03: A new option "-d" is added to allow users to change
+*                 TM-score normalization scale. A version number is attached 
+*                 to the program from now on.
+*     2011/10/11: A new scale (d0) was introduced for alignment search. This
+*                 is to mainly improve alignment selection for small proteins 
+*                 (e.g. L<50 residues) but also increase alignment coverage
+*                 of larger proteins. Second, TM-align output format is changed
+*                 and two TM-scores normalized by both chains are reported.
+*     2011/10/12: Distance cutoff for gap is increased from 3.85A to 4.25A.
+*                 Added 'TMalign -v' to allow user to check version number.
+*     2012/01/24: Fix a bug for secondary structure definition
+**************************************************************************
+* The fortran program was converted to c using f2c. Manual editing was
+* done to deprecate dependency on libf2c. Finally minor edits were made
+* to make the code callable rather than being main, to return results
+* in a data-struct and avoid alignment printing.
+*/
 ////////
 #include "tmalign_extern.h"
 //
